@@ -1,0 +1,160 @@
+namespace: kr
+description: Korean (South Korea) PII patterns
+
+patterns:
+  - id: mobile_01
+    location: kr
+    category: phone
+    description: Korean mobile phone number (010/011/016/017/018/019)
+    pattern: '01[016-9]-?\d{3,4}-?\d{4}'
+    mask: "***-****-****"
+    examples:
+      match:
+        - "010-1234-5678"
+        - "01012345678"
+        - "011-123-4567"
+        - "016-9999-8888"
+      nomatch:
+        - "012-1234-5678"
+        - "010-123-456"
+        - "02-1234-5678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: landline_seoul_01
+    location: kr
+    category: phone
+    description: Seoul landline (02-XXXX-XXXX or 02-XXX-XXXX)
+    pattern: '02-?\d{3,4}-?\d{4}'
+    mask: "02-***-****"
+    examples:
+      match:
+        - "02-1234-5678"
+        - "02-123-4567"
+        - "021234567"
+      nomatch:
+        - "010-1234-5678"
+        - "02-12-3456"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: rrn_01
+    location: kr
+    category: rrn
+    description: Korean Resident Registration Number (주민등록번호)
+    pattern: '\d{6}-?[1-4]\d{6}'
+    mask: "******-*******"
+    examples:
+      match:
+        - "900101-1234567"
+        - "900101-2345678"
+        - "8001011234567"
+      nomatch:
+        - "900101-5234567"
+        - "90010-11234567"
+        - "900101-123456"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "First 6 digits: YYMMDD, 7th digit: gender/century (1-4)"
+
+  - id: business_registration_01
+    location: kr
+    category: other
+    description: Korean Business Registration Number (사업자등록번호)
+    pattern: '\d{3}-?\d{2}-?\d{5}'
+    mask: "***-**-*****"
+    examples:
+      match:
+        - "123-45-67890"
+        - "1234567890"
+      nomatch:
+        - "12-345-67890"
+        - "123-456-7890"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: medium
+
+  - id: corporate_registration_01
+    location: kr
+    category: other
+    description: Korean Corporate Registration Number (법인등록번호)
+    pattern: '\d{6}-?\d{7}'
+    mask: "******-*******"
+    examples:
+      match:
+        - "123456-1234567"
+        - "1234561234567"
+      nomatch:
+        - "12345-12345678"
+        - "123456-123456"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: medium
+
+  - id: passport_01
+    location: kr
+    category: passport
+    description: Korean passport number (M+8 digits or S+8 digits)
+    pattern: '[MS]\d{8}'
+    flags: [IGNORECASE]
+    mask: "M********"
+    examples:
+      match:
+        - "M12345678"
+        - "S87654321"
+        - "m12345678"
+      nomatch:
+        - "A12345678"
+        - "M1234567"
+        - "M123456789"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: driver_license_01
+    location: kr
+    category: other
+    description: Korean driver's license number (XX-XXXXXX-XX)
+    pattern: '\d{2}-?\d{6}-?\d{2}'
+    mask: "**-******-**"
+    examples:
+      match:
+        - "12-345678-90"
+        - "1234567890"
+      nomatch:
+        - "123-45678-90"
+        - "12-34567-890"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: bank_account_01
+    location: kr
+    category: bank
+    description: Korean bank account number (simplified, 10-14 digits)
+    pattern: '\d{10,14}'
+    mask: "****-****-****"
+    examples:
+      match:
+        - "1234567890"
+        - "12345678901234"
+      nomatch:
+        - "123456789"
+        - "123456789012345"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "This is a simplified pattern. Real validation requires bank-specific formats."

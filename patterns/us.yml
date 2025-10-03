@@ -1,0 +1,157 @@
+namespace: us
+description: United States PII patterns
+
+patterns:
+  - id: ssn_01
+    location: us
+    category: ssn
+    description: US Social Security Number (XXX-XX-XXXX)
+    pattern: '\d{3}-?\d{2}-?\d{4}'
+    mask: "***-**-****"
+    examples:
+      match:
+        - "123-45-6789"
+        - "123456789"
+      nomatch:
+        - "12-345-6789"
+        - "1234-56-789"
+        - "123-456-789"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "Does not validate against SSA rules (e.g., no 000, 666, 900-999 in first group)"
+
+  - id: phone_01
+    location: us
+    category: phone
+    description: US phone number (10 digits with optional country code)
+    pattern: '(?:\+1[-.\s]?)?(?:\([0-9]{3}\)|[0-9]{3})[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}'
+    mask: "(***) ***-****"
+    examples:
+      match:
+        - "(555) 123-4567"
+        - "555-123-4567"
+        - "5551234567"
+        - "+1-555-123-4567"
+        - "+1 (555) 123-4567"
+      nomatch:
+        - "123-4567"
+        - "555-12-34567"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: zipcode_01
+    location: us
+    category: address
+    description: US ZIP code (5 digits or ZIP+4)
+    pattern: '\b\d{5}(?:-\d{4})?\b'
+    mask: "*****"
+    examples:
+      match:
+        - "12345"
+        - "12345-6789"
+      nomatch:
+        - "1234"
+        - "123456"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: passport_01
+    location: us
+    category: passport
+    description: US passport number (9 digits or letter followed by 8 digits)
+    pattern: '(?:[0-9]{9}|[A-Z][0-9]{8})'
+    flags: [IGNORECASE]
+    mask: "*********"
+    examples:
+      match:
+        - "123456789"
+        - "A12345678"
+      nomatch:
+        - "12345678"
+        - "AB1234567"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: ein_01
+    location: us
+    category: other
+    description: Employer Identification Number (XX-XXXXXXX)
+    pattern: '\d{2}-?\d{7}'
+    mask: "**-*******"
+    examples:
+      match:
+        - "12-3456789"
+        - "123456789"
+      nomatch:
+        - "123-456789"
+        - "12-345678"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: medium
+
+  - id: itin_01
+    location: us
+    category: ssn
+    description: Individual Taxpayer Identification Number (9XX-XX-XXXX)
+    pattern: '9\d{2}-?\d{2}-?\d{4}'
+    mask: "***-**-****"
+    examples:
+      match:
+        - "900-12-3456"
+        - "999123456"
+      nomatch:
+        - "800-12-3456"
+        - "123-45-6789"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: driver_license_ca_01
+    location: us
+    category: other
+    description: California driver's license (1 letter + 7 digits)
+    pattern: '[A-Z]\d{7}'
+    flags: [IGNORECASE]
+    mask: "A*******"
+    examples:
+      match:
+        - "A1234567"
+        - "z9876543"
+      nomatch:
+        - "AB123456"
+        - "1234567"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      state: "CA"
+
+  - id: medicare_01
+    location: us
+    category: other
+    description: Medicare Beneficiary Identifier (1 letter + 10 alphanumeric)
+    pattern: '[A-Z]\d{3}[A-Z]{2}\d{4}[A-Z]'
+    flags: [IGNORECASE]
+    mask: "A***AA****A"
+    examples:
+      match:
+        - "A123BC4567D"
+      nomatch:
+        - "123456789"
+        - "A1234567890"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical

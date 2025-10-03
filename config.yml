@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+  tls: false
+  # tls_cert: /path/to/cert.pem
+  # tls_key: /path/to/key.pem
+
+security:
+  api_key_required: false
+  # api_key: ${API_KEY}  # Set via environment variable
+  rate_limit_rps: 100
+  # jwt_secret: ${JWT_SECRET}
+
+registry:
+  paths:
+    - patterns/common.yml
+    - patterns/kr.yml
+    - patterns/us.yml
+  hot_reload: true
+  reload_interval: 60  # seconds
+
+redaction:
+  default_strategy: mask  # mask, hash, tokenize
+  hash_algorithm: sha256
+  mask_char: "*"
+
+observability:
+  metrics: prometheus
+  metrics_port: 9090
+  log_level: INFO  # DEBUG, INFO, WARNING, ERROR
+  log_format: json  # json, text
+
+performance:
+  max_text_length: 1048576  # 1MB
+  timeout_ms: 5000
+  worker_count: 4

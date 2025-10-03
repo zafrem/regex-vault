@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://regex-vault.io/schemas/pattern-schema.json",
+  "title": "Regex Vault Pattern Schema",
+  "description": "Schema for regex-vault pattern definition files",
+  "type": "object",
+  "required": ["namespace", "patterns"],
+  "properties": {
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z]{2}$",
+      "description": "ISO2 country code (e.g., kr, us, jp)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of this pattern namespace"
+    },
+    "patterns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/pattern"
+      }
+    }
+  },
+  "definitions": {
+    "pattern": {
+      "type": "object",
+      "required": ["id", "location", "category", "pattern"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z_][a-z0-9_]*_\\d{2}$",
+          "description": "Unique identifier within namespace with 2-digit suffix (e.g., mobile_01, ssn_01)"
+        },
+        "location": {
+          "type": "string",
+          "pattern": "^[a-z]{2,4}$",
+          "description": "Location/region identifier (e.g., kr, us, comm)"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["phone", "ssn", "rrn", "email", "bank", "passport", "address", "credit_card", "ip", "other"],
+          "description": "Category of personal information"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the pattern"
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Regular expression pattern"
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["IGNORECASE", "MULTILINE", "DOTALL", "UNICODE", "VERBOSE"]
+          },
+          "description": "Regex flags to apply"
+        },
+        "mask": {
+          "type": "string",
+          "description": "Default mask template (e.g., ***-****-****)"
+        },
+        "examples": {
+          "type": "object",
+          "properties": {
+            "match": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Examples that should match"
+            },
+            "nomatch": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Examples that should NOT match"
+            }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "store_raw": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether raw matched text can be stored"
+            },
+            "action_on_match": {
+              "type": "string",
+              "enum": ["redact", "report", "tokenize", "ignore"],
+              "default": "redact",
+              "description": "Default action when pattern matches"
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "default": "medium",
+              "description": "Severity level of the PII type"
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional metadata for the pattern",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+name: Pattern Validation
+
+on:
+  pull_request:
+    paths:
+      - 'patterns/**'
+      - 'schemas/**'
+
+jobs:
+  validate-patterns:
+    name: Validate Pattern Changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Validate pattern schema
+        run: |
+          python -c "
+          import json
+          import yaml
+          from pathlib import Path
+          import jsonschema
+
+          schema_path = Path('schemas/pattern-schema.json')
+          with open(schema_path) as f:
+              schema = json.load(f)
+
+          errors = []
+          for pattern_file in Path('patterns').glob('*.yml'):
+              print(f'Validating {pattern_file}...')
+              try:
+                  with open(pattern_file) as f:
+                      data = yaml.safe_load(f)
+                  jsonschema.validate(data, schema)
+                  print(f'✓ {pattern_file} is valid')
+              except Exception as e:
+                  errors.append(f'{pattern_file}: {e}')
+
+          if errors:
+              print('\nValidation errors:')
+              for error in errors:
+                  print(f'  ✗ {error}')
+              exit(1)
+          "
+
+      - name: Test pattern examples
+        run: |
+          python -c "
+          from regexvault import load_registry
+
+          print('Testing pattern examples...')
+          registry = load_registry()
+
+          errors = []
+          for pattern in registry.get_all_patterns():
+              if not pattern.examples:
+                  continue
+
+              # Test match examples
+              for example in pattern.examples.match:
+                  if not pattern.compiled.fullmatch(example):
+                      errors.append(
+                          f'{pattern.full_id}: Example should match: \"{example}\"'
+                      )
+
+              # Test nomatch examples
+              for example in pattern.examples.nomatch:
+                  if pattern.compiled.fullmatch(example):
+                      errors.append(
+                          f'{pattern.full_id}: Example should NOT match: \"{example}\"'
+                      )
+
+          if errors:
+              print('\nExample validation errors:')
+              for error in errors:
+                  print(f'  ✗ {error}')
+              exit(1)
+          else:
+              print(f'✓ All pattern examples are valid')
+          "
+
+      - name: Check for ReDoS vulnerabilities
+        run: |
+          pip install regexploit
+          python -c "
+          from regexvault import load_registry
+          import subprocess
+          import sys
+
+          registry = load_registry()
+
+          print('Checking for ReDoS vulnerabilities...')
+          vulnerable = []
+
+          for pattern in registry.get_all_patterns():
+              # Simple heuristic check for potentially dangerous patterns
+              pattern_str = pattern.pattern
+
+              # Check for nested quantifiers (simplified)
+              if '.*.*' in pattern_str or '.+.+' in pattern_str:
+                  vulnerable.append(f'{pattern.full_id}: Possible nested quantifiers')
+
+              # Check for overlapping alternations
+              if '|' in pattern_str and ('*' in pattern_str or '+' in pattern_str):
+                  print(f'⚠️  {pattern.full_id}: Review for potential ReDoS')
+
+          if vulnerable:
+              print('\nPotential ReDoS vulnerabilities:')
+              for v in vulnerable:
+                  print(f'  ⚠️  {v}')
+              print('\nPlease review these patterns carefully.')
+          else:
+              print('✓ No obvious ReDoS vulnerabilities detected')
+          "

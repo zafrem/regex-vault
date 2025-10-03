@@ -1,0 +1,118 @@
+namespace: common
+description: Common patterns applicable across countries
+
+patterns:
+  - id: email_01
+    location: comm
+    category: email
+    description: Standard email address (RFC 5322 simplified)
+    pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    flags: [IGNORECASE]
+    mask: "***@***.***"
+    examples:
+      match:
+        - "user@example.com"
+        - "john.doe+tag@company.co.uk"
+        - "test_user123@mail-server.org"
+      nomatch:
+        - "invalid.email@"
+        - "@example.com"
+        - "user@"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: medium
+
+  - id: ipv4_01
+    location: comm
+    category: ip
+    description: IPv4 address
+    pattern: '\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
+    mask: "*.*.*.*"
+    examples:
+      match:
+        - "192.168.1.1"
+        - "10.0.0.1"
+        - "255.255.255.255"
+      nomatch:
+        - "256.1.1.1"
+        - "192.168.1"
+        - "192.168.1.1.1"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: ipv6_01
+    location: comm
+    category: ip
+    description: IPv6 address (simplified)
+    pattern: '(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
+    flags: [IGNORECASE]
+    mask: "****:****:****:****:****:****:****:****"
+    examples:
+      match:
+        - "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
+        - "2001:db8:85a3::8a2e:370:7334"
+      nomatch:
+        - "192.168.1.1"
+        - "gggg:gggg:gggg:gggg:gggg:gggg:gggg:gggg"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: credit_card_visa_01
+    location: comm
+    category: credit_card
+    description: Visa credit card number
+    pattern: '4[0-9]{12}(?:[0-9]{3})?'
+    mask: "****-****-****-****"
+    examples:
+      match:
+        - "4111111111111111"
+        - "4012888888881881"
+      nomatch:
+        - "5111111111111111"
+        - "411111111111"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: credit_card_mastercard_01
+    location: comm
+    category: credit_card
+    description: MasterCard credit card number
+    pattern: '5[1-5][0-9]{14}'
+    mask: "****-****-****-****"
+    examples:
+      match:
+        - "5500000000000004"
+        - "5105105105105100"
+      nomatch:
+        - "4111111111111111"
+        - "550000000000"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: url_01
+    location: comm
+    category: other
+    description: URL with http/https protocol
+    pattern: 'https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]*)'
+    flags: [IGNORECASE]
+    mask: "https://***"
+    examples:
+      match:
+        - "https://example.com"
+        - "http://www.test.org/path?query=value"
+      nomatch:
+        - "ftp://example.com"
+        - "example.com"
+    policy:
+      store_raw: true
+      action_on_match: report
+      severity: low
