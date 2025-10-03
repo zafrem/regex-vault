@@ -197,3 +197,33 @@ patterns:
       severity: critical
     metadata:
       note: "This is a simplified pattern. Real validation requires bank-specific formats."
+
+  - id: korean_name_01
+    location: kr
+    category: name
+    description: Korean full name (family name + given name)
+    pattern: '\b[가-힣]{2,5}\b'
+    mask: "***"
+    examples:
+      match:
+        - "김철수"
+        - "이영희"
+        - "박민수"
+        - "최지은"
+        - "정현우"
+        - "강미영"
+        - "조성민"
+        - "윤서연"
+      nomatch:
+        - "김"
+        - "abcd"
+        - "김철수님"
+        - "123"
+        - "가"
+        - "김철수박민수"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      note: "Matches 2-5 Hangul characters. Most Korean names are 3 characters (1 family + 2 given name)."

@@ -1,0 +1,220 @@
+namespace: jp
+description: Japan PII patterns
+
+patterns:
+  - id: mobile_01
+    location: jp
+    category: phone
+    description: Japanese mobile phone number (090/080/070-XXXX-XXXX)
+    pattern: '0[789]0-?[0-9]{4}-?[0-9]{4}'
+    mask: "0**-****-****"
+    examples:
+      match:
+        - "090-1234-5678"
+        - "08012345678"
+        - "070-9876-5432"
+      nomatch:
+        - "060-1234-5678"
+        - "090-123-45678"
+        - "0901-234-5678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: landline_01
+    location: jp
+    category: phone
+    description: Japanese landline number (area code + number)
+    pattern: '0[1-9]-?[0-9]{1,4}-?[0-9]{4}'
+    mask: "0*-****-****"
+    examples:
+      match:
+        - "03-1234-5678"
+        - "06-6789-0123"
+        - "011-123-4567"
+        - "0312345678"
+      nomatch:
+        - "00-1234-5678"
+        - "090-1234-5678"
+        - "03-12345-678"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: my_number_01
+    location: jp
+    category: national_id
+    description: Japanese My Number (12 digits)
+    pattern: '[0-9]{4}-?[0-9]{4}-?[0-9]{4}'
+    mask: "****-****-****"
+    examples:
+      match:
+        - "1234-5678-9012"
+        - "123456789012"
+        - "9876-5432-1098"
+      nomatch:
+        - "123-456-789012"
+        - "12345-6789-012"
+        - "1234567890"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "Japan's individual number system introduced in 2015"
+
+  - id: passport_01
+    location: jp
+    category: passport
+    description: Japanese passport number (2 letters + 7 digits)
+    pattern: '[A-Z]{2}[0-9]{7}'
+    flags: [IGNORECASE]
+    mask: "AA*******"
+    examples:
+      match:
+        - "AB1234567"
+        - "XY9876543"
+        - "cd2345678"
+      nomatch:
+        - "A1234567"
+        - "ABC123456"
+        - "AB12345678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: zipcode_01
+    location: jp
+    category: address
+    description: Japanese postal code (XXX-XXXX)
+    pattern: '[0-9]{3}-?[0-9]{4}'
+    mask: "***-****"
+    examples:
+      match:
+        - "123-4567"
+        - "1234567"
+        - "100-0001"
+      nomatch:
+        - "12-34567"
+        - "1234-567"
+        - "12345678"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: driver_license_01
+    location: jp
+    category: other
+    description: Japanese driver's license (12 digits)
+    pattern: '[0-9]{4}-?[0-9]{2}-?[0-9]{6}'
+    mask: "****-**-******"
+    examples:
+      match:
+        - "1234-56-789012"
+        - "123456789012"
+        - "9876-54-321098"
+      nomatch:
+        - "123-456-789012"
+        - "12345-6-789012"
+        - "1234567890"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: bank_account_01
+    location: jp
+    category: bank
+    description: Japanese bank account number (7 digits)
+    pattern: '[0-9]{7}'
+    mask: "*******"
+    examples:
+      match:
+        - "1234567"
+        - "9876543"
+      nomatch:
+        - "123456"
+        - "12345678"
+        - "A123456"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "Standard format for most Japanese banks"
+
+  - id: japanese_name_hiragana_01
+    location: jp
+    category: name
+    description: Japanese name in Hiragana (2-8 characters)
+    pattern: '\b[\u3040-\u309f]{2,8}\b'
+    mask: "***"
+    examples:
+      match:
+        - "たなか"
+        - "やまだたろう"
+        - "さとうはなこ"
+        - "すずき"
+      nomatch:
+        - "た"
+        - "abcd"
+        - "田中"
+        - "123"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      note: "Matches Hiragana characters only"
+
+  - id: japanese_name_katakana_01
+    location: jp
+    category: name
+    description: Japanese name in Katakana (2-8 characters)
+    pattern: '\b[\u30a0-\u30ff]{2,8}\b'
+    mask: "***"
+    examples:
+      match:
+        - "タナカ"
+        - "ヤマダタロウ"
+        - "サトウハナコ"
+        - "スズキ"
+      nomatch:
+        - "タ"
+        - "abcd"
+        - "田中"
+        - "123"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      note: "Matches Katakana characters only"
+
+  - id: japanese_name_kanji_01
+    location: jp
+    category: name
+    description: Japanese name in Kanji (2-4 characters)
+    pattern: '\b[\u4e00-\u9fff]{2,4}\b'
+    mask: "***"
+    examples:
+      match:
+        - "田中"
+        - "山田太郎"
+        - "佐藤花子"
+        - "鈴木"
+      nomatch:
+        - "田"
+        - "abcd"
+        - "たなか"
+        - "123"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      note: "Matches Kanji characters. Most common format for Japanese names."

@@ -1,0 +1,130 @@
+namespace: tw
+description: Taiwan (Republic of China) PII patterns
+
+patterns:
+  - id: mobile_01
+    location: tw
+    category: phone
+    description: Taiwan mobile phone number (09XX-XXX-XXX)
+    pattern: '09[0-9]{2}-?[0-9]{3}-?[0-9]{3}'
+    mask: "09**-***-***"
+    examples:
+      match:
+        - "0912-345-678"
+        - "0987654321"
+        - "0923-456-789"
+      nomatch:
+        - "0812-345-678"
+        - "09123-45-678"
+        - "091-234-5678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+
+  - id: landline_01
+    location: tw
+    category: phone
+    description: Taiwan landline number (area code + number)
+    pattern: '0[2-8]-?[0-9]{7,8}'
+    mask: "0*-********"
+    examples:
+      match:
+        - "02-12345678"
+        - "07-1234567"
+        - "04-23456789"
+        - "0212345678"
+      nomatch:
+        - "01-12345678"
+        - "09-12345678"
+        - "02-123456"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
+
+  - id: national_id_01
+    location: tw
+    category: national_id
+    description: Taiwan National ID (1 letter + 9 digits)
+    pattern: '[A-Z][0-9]{9}'
+    flags: [IGNORECASE]
+    mask: "A*********"
+    examples:
+      match:
+        - "A123456789"
+        - "B987654321"
+        - "f234567890"
+      nomatch:
+        - "AB12345678"
+        - "A12345678"
+        - "1234567890"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+    metadata:
+      note: "First letter indicates birth location, 2nd digit indicates gender"
+
+  - id: passport_01
+    location: tw
+    category: passport
+    description: Taiwan passport number (9 digits)
+    pattern: '[0-9]{9}'
+    mask: "*********"
+    examples:
+      match:
+        - "123456789"
+        - "987654321"
+      nomatch:
+        - "12345678"
+        - "1234567890"
+        - "A12345678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: critical
+
+  - id: business_id_01
+    location: tw
+    category: other
+    description: Taiwan Business Uniform Number (8 digits)
+    pattern: '[0-9]{8}'
+    mask: "********"
+    examples:
+      match:
+        - "12345678"
+        - "87654321"
+      nomatch:
+        - "1234567"
+        - "123456789"
+        - "A1234567"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: medium
+
+  - id: chinese_name_01
+    location: tw
+    category: name
+    description: Traditional Chinese name (2-4 characters)
+    pattern: '\b[\u4e00-\u9fff]{2,4}\b'
+    mask: "***"
+    examples:
+      match:
+        - "王小明"
+        - "李美麗"
+        - "陳志強"
+        - "林雅婷"
+        - "歐陽修"
+      nomatch:
+        - "王"
+        - "abcd"
+        - "王小明先生"
+        - "123"
+    policy:
+      store_raw: false
+      action_on_match: redact
+      severity: high
+    metadata:
+      note: "Matches Traditional Chinese characters. Most names are 2-3 characters."
