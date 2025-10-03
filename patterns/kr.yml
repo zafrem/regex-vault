@@ -6,13 +6,13 @@ patterns:
     location: kr
     category: phone
     description: Korean mobile phone number (010/011/016/017/018/019)
-    pattern: '01[016-9]-?\d{3,4}-?\d{4}'
+    pattern: '01[01679]-?[0-9]{3,4}-?[0-9]{4}'
     mask: "***-****-****"
     examples:
       match:
         - "010-1234-5678"
         - "01012345678"
-        - "011-123-4567"
+        - "011-1234-5678"
         - "016-9999-8888"
       nomatch:
         - "012-1234-5678"
@@ -22,31 +22,70 @@ patterns:
       store_raw: false
       action_on_match: redact
       severity: high
-
-  - id: landline_seoul_01
+  - id: mobile_02
     location: kr
     category: phone
-    description: Seoul landline (02-XXXX-XXXX or 02-XXX-XXXX)
-    pattern: '02-?\d{3,4}-?\d{4}'
-    mask: "02-***-****"
+    description: Korean mobile phone number with closing parenthesis after prefix (e.g., 010)XXXX-XXXX)
+    pattern: '01[01679]\)[0-9]{3,4}-[0-9]{4}'
+    mask: "010)****-****"
+    examples:
+      match:
+        - "010)1234-5678"
+        - "010)123-4567"
+      nomatch:
+        - "010-1234-5678"
+        - "011)1234-5678"
+    policy:
+      store_raw: false
+      action_on_match: redact
+  - id: landline_01
+    location: kr
+    category: phone
+    description: Korean landline numbers (02, 031-033, 041-044, 051-055, 061-064)
+    pattern: '(02|03[1-3]|04[1-4]|05[1-5]|06[1-4])-?[0-9]{3,4}-?[0-9]{4}'
+    mask: "0**-***-****"
     examples:
       match:
         - "02-1234-5678"
-        - "02-123-4567"
-        - "021234567"
+        - "031-123-4567"
+        - "042-1234-5678"
+        - "055-987-6543"
+        - "064-555-1234"
+        - "0211234567"
       nomatch:
         - "010-1234-5678"
-        - "02-12-3456"
+        - "030-123-4567"
+        - "070-123-4567"
     policy:
       store_raw: false
       action_on_match: report
       severity: low
-
+  - id: landline_02
+    location: kr
+    category: phone
+    description: Korean landline numbers (02, 031-033, 041-044, 051-055, 061-064)
+    pattern: '(02|03[1-3]|04[1-4]|05[1-5]|06[1-4])\)[0-9]{3,4}-[0-9]{4}'
+    mask: "0**)***-****"
+    examples:
+      match:
+        - "02)1234-5678"
+        - "031)123-4567"
+        - "042)1234-5678"
+        - "055)987-6543"
+        - "064)555-1234"
+      nomatch:
+        - "010)1234-5678"
+        - "030)123-4567"
+        - "070)123-4567"
+    policy:
+      store_raw: false
+      action_on_match: report
+      severity: low
   - id: rrn_01
     location: kr
     category: rrn
     description: Korean Resident Registration Number (주민등록번호)
-    pattern: '\d{6}-?[1-4]\d{6}'
+    pattern: '[0-9]{6}-?[1-4][0-9]{6}'
     mask: "******-*******"
     examples:
       match:
@@ -68,7 +107,7 @@ patterns:
     location: kr
     category: other
     description: Korean Business Registration Number (사업자등록번호)
-    pattern: '\d{3}-?\d{2}-?\d{5}'
+    pattern: '[0-9]{3}-?[0-9]{2}-?[0-9]{5}'
     mask: "***-**-*****"
     examples:
       match:
@@ -86,7 +125,7 @@ patterns:
     location: kr
     category: other
     description: Korean Corporate Registration Number (법인등록번호)
-    pattern: '\d{6}-?\d{7}'
+    pattern: '[0-9]{6}-?[0-9]{7}'
     mask: "******-*******"
     examples:
       match:
@@ -104,7 +143,7 @@ patterns:
     location: kr
     category: passport
     description: Korean passport number (M+8 digits or S+8 digits)
-    pattern: '[MS]\d{8}'
+    pattern: '[MS][0-9]{8}'
     flags: [IGNORECASE]
     mask: "M********"
     examples:
@@ -125,7 +164,7 @@ patterns:
     location: kr
     category: other
     description: Korean driver's license number (XX-XXXXXX-XX)
-    pattern: '\d{2}-?\d{6}-?\d{2}'
+    pattern: '[0-9]{2}-?[0-9]{6}-?[0-9]{2}'
     mask: "**-******-**"
     examples:
       match:
@@ -143,7 +182,7 @@ patterns:
     location: kr
     category: bank
     description: Korean bank account number (simplified, 10-14 digits)
-    pattern: '\d{10,14}'
+    pattern: '[0-9]{10,14}'
     mask: "****-****-****"
     examples:
       match:

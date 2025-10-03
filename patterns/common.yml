@@ -2,7 +2,7 @@ namespace: common
 description: Common patterns applicable across countries
 
 patterns:
-  - id: email_01
+  - id: email
     location: comm
     category: email
     description: Standard email address (RFC 5322 simplified)
@@ -23,7 +23,7 @@ patterns:
       action_on_match: redact
       severity: medium
 
-  - id: ipv4_01
+  - id: ipv4
     location: comm
     category: ip
     description: IPv4 address
@@ -43,7 +43,7 @@ patterns:
       action_on_match: report
       severity: low
 
-  - id: ipv6_01
+  - id: ipv6
     location: comm
     category: ip
     description: IPv6 address (simplified)
