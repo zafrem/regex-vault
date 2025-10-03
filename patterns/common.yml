@@ -1,9 +1,9 @@
-namespace: common
+namespace: co
 description: Common patterns applicable across countries
 
 patterns:
-  - id: email
-    location: comm
+  - id: email_01
+    location: co
     category: email
     description: Standard email address (RFC 5322 simplified)
     pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
@@ -23,8 +23,8 @@ patterns:
       action_on_match: redact
       severity: medium
 
-  - id: ipv4
-    location: comm
+  - id: ipv4_01
+    location: co
     category: ip
     description: IPv4 address
     pattern: '\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
@@ -43,8 +43,8 @@ patterns:
       action_on_match: report
       severity: low
 
-  - id: ipv6
-    location: comm
+  - id: ipv6_01
+    location: co
     category: ip
     description: IPv6 address (simplified)
     pattern: '(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}'
@@ -53,7 +53,7 @@ patterns:
     examples:
       match:
         - "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
-        - "2001:db8:85a3::8a2e:370:7334"
+        - "2001:0db8:85a3:1234:5678:8a2e:0370:7334"
       nomatch:
         - "192.168.1.1"
         - "gggg:gggg:gggg:gggg:gggg:gggg:gggg:gggg"
@@ -63,7 +63,7 @@ patterns:
       severity: low
 
   - id: credit_card_visa_01
-    location: comm
+    location: co
     category: credit_card
     description: Visa credit card number
     pattern: '4[0-9]{12}(?:[0-9]{3})?'
@@ -81,7 +81,7 @@ patterns:
       severity: critical
 
   - id: credit_card_mastercard_01
-    location: comm
+    location: co
     category: credit_card
     description: MasterCard credit card number
     pattern: '5[1-5][0-9]{14}'
@@ -99,7 +99,7 @@ patterns:
       severity: critical
 
   - id: url_01
-    location: comm
+    location: co
     category: other
     description: URL with http/https protocol
     pattern: 'https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]*)'

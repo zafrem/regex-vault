@@ -45,7 +45,7 @@ patterns:
 
   - id: national_id_01
     location: tw
-    category: national_id
+    category: other
     description: Taiwan National ID (1 letter + 9 digits)
     pattern: '[A-Z][0-9]{9}'
     flags: [IGNORECASE]
@@ -106,7 +106,7 @@ patterns:
 
   - id: chinese_name_01
     location: tw
-    category: name
+    category: other
     description: Traditional Chinese name (2-4 characters)
     pattern: '\b[\u4e00-\u9fff]{2,4}\b'
     mask: "***"

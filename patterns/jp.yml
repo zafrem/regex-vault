@@ -26,7 +26,7 @@ patterns:
     location: jp
     category: phone
     description: Japanese landline number (area code + number)
-    pattern: '0[1-9]-?[0-9]{1,4}-?[0-9]{4}'
+    pattern: '0(?!([789]0))[1-9][0-9]?-?[0-9]{3,4}-?[0-9]{4}'
     mask: "0*-****-****"
     examples:
       match:
@@ -45,7 +45,7 @@ patterns:
 
   - id: my_number_01
     location: jp
-    category: national_id
+    category: other
     description: Japanese My Number (12 digits)
     pattern: '[0-9]{4}-?[0-9]{4}-?[0-9]{4}'
     mask: "****-****-****"
@@ -149,7 +149,7 @@ patterns:
 
   - id: japanese_name_hiragana_01
     location: jp
-    category: name
+    category: other
     description: Japanese name in Hiragana (2-8 characters)
     pattern: '\b[\u3040-\u309f]{2,8}\b'
     mask: "***"
@@ -173,7 +173,7 @@ patterns:
 
   - id: japanese_name_katakana_01
     location: jp
-    category: name
+    category: other
     description: Japanese name in Katakana (2-8 characters)
     pattern: '\b[\u30a0-\u30ff]{2,8}\b'
     mask: "***"
@@ -197,7 +197,7 @@ patterns:
 
   - id: japanese_name_kanji_01
     location: jp
-    category: name
+    category: other
     description: Japanese name in Kanji (2-4 characters)
     pattern: '\b[\u4e00-\u9fff]{2,4}\b'
     mask: "***"

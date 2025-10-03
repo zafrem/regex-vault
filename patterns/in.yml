@@ -47,7 +47,7 @@ patterns:
 
   - id: aadhaar_01
     location: in
-    category: national_id
+    category: other
     description: Aadhaar number (12 digits)
     pattern: '[0-9]{4}-?[0-9]{4}-?[0-9]{4}'
     mask: "****-****-****"
@@ -69,7 +69,7 @@ patterns:
 
   - id: pan_01
     location: in
-    category: tax
+    category: other
     description: PAN (Permanent Account Number) - 5 letters + 4 digits + 1 letter
     pattern: '[A-Z]{5}[0-9]{4}[A-Z]'
     flags: [IGNORECASE]
@@ -200,9 +200,9 @@ patterns:
 
   - id: gst_01
     location: in
-    category: tax
+    category: other
     description: GST number (15 characters)
-    pattern: '[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9][A-Z][0-9]'
+    pattern: '[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9][A-Z][A-Z0-9]'
     flags: [IGNORECASE]
     mask: "**AAAAA****A*A*"
     examples:
@@ -223,7 +223,7 @@ patterns:
 
   - id: indian_name_01
     location: in
-    category: name
+    category: other
     description: Indian name in Latin script (2-50 characters)
     pattern: '\b[A-Za-z][A-Za-z\s]{1,49}\b'
     mask: "***"

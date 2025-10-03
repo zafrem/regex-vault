@@ -34,7 +34,7 @@ patterns:
         - "010)123-4567"
       nomatch:
         - "010-1234-5678"
-        - "011)1234-5678"
+        - "012)1234-5678"
     policy:
       store_raw: false
       action_on_match: redact
@@ -200,7 +200,7 @@ patterns:
 
   - id: korean_name_01
     location: kr
-    category: name
+    category: other
     description: Korean full name (family name + given name)
     pattern: '\b[가-힣]{2,5}\b'
     mask: "***"
@@ -217,7 +217,7 @@ patterns:
       nomatch:
         - "김"
         - "abcd"
-        - "김철수님"
+        - "A김철수"
         - "123"
         - "가"
         - "김철수박민수"

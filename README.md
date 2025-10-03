@@ -126,11 +126,13 @@ patterns:
 
 The `location` field identifies the geographic or categorical scope of the pattern:
 
+- **`comm`** - Common/International patterns
 - **`kr`** - South Korea
 - **`us`** - United States
-- **`comm`** - Common/International patterns
-- **`jp`** - Japan (future)
-- **`cn`** - China (future)
+- **`tw`** - Taiwan (Republic of China)
+- **`jp`** - Japan
+- **`cn`** - China (People's Republic of China)
+- **`in`** - India
 - **`eu`** - European Union (future)
 - **`intl`** - International (multi-region)
 
@@ -154,6 +156,10 @@ registry:
     - patterns/common.yml
     - patterns/kr.yml
     - patterns/us.yml
+    - patterns/tw.yml
+    - patterns/jp.yml
+    - patterns/cn.yml
+    - patterns/in.yml
   hot_reload: true
 
 redaction:
@@ -268,35 +274,78 @@ python -c "from regexvault import load_registry; load_registry(validate_examples
 
 ## Supported Patterns by Location
 
+### Common/International (location: comm)
+- `email` - Email addresses
+- `ipv4` - IPv4 addresses
+- `ipv6` - IPv6 addresses
+- `credit_card_visa` - Visa credit cards
+- `credit_card_mastercard` - MasterCard credit cards
+- `url` - URLs
+
 ### Korean (location: kr)
-- `mobile_01` - Mobile phone numbers
-- `landline_seoul_01` - Seoul landline numbers
-- `rrn_01` - Resident Registration Number
-- `business_registration_01` - Business Registration Number
-- `corporate_registration_01` - Corporate Registration Number
-- `passport_01` - Passport numbers
-- `driver_license_01` - Driver's license numbers
-- `bank_account_01` - Bank account numbers
+- `mobile` - Mobile phone numbers
+- `landline` - Landline numbers
+- `rrn` - Resident Registration Number
+- `business_registration` - Business Registration Number
+- `corporate_registration` - Corporate Registration Number
+- `passport` - Passport numbers
+- `driver_license` - Driver's license numbers
+- `bank_account` - Bank account numbers
+- `korean_name` - Korean names
 
 ### United States (location: us)
-- `ssn_01` - Social Security Number
-- `phone_01` - Phone numbers
-- `zipcode_01` - ZIP codes
-- `passport_01` - Passport numbers
-- `ein_01` - Employer Identification Number
-- `itin_01` - Individual Taxpayer Identification Number
-- `driver_license_ca_01` - California driver's license
-- `medicare_01` - Medicare Beneficiary Identifier
+- `ssn` - Social Security Number
+- `phone` - Phone numbers
+- `zipcode` - ZIP codes
+- `passport` - Passport numbers
+- `ein` - Employer Identification Number
+- `itin` - Individual Taxpayer Identification Number
+- `driver_license_ca` - California driver's license
+- `medicare` - Medicare Beneficiary Identifier
 
-### Common/International (location: comm)
-- `email_01` - Email addresses
-- `ipv4_01` - IPv4 addresses
-- `ipv6_01` - IPv6 addresses
-- `credit_card_visa_01` - Visa credit cards
-- `credit_card_mastercard_01` - MasterCard credit cards
-- `url_01` - URLs
+### Taiwan (location: tw)
+- `mobile` - Mobile phone numbers
+- `landline` - Landline numbers
+- `national_id` - National ID
+- `passport` - Passport numbers
+- `business_id` - Business Uniform Number
+- `chinese_name` - Traditional Chinese names
 
-**Total**: 22 patterns across 3 locations
+### Japan (location: jp)
+- `mobile` - Mobile phone numbers
+- `landline` - Landline numbers
+- `my_number` - My Number (individual number)
+- `passport` - Passport numbers
+- `zipcode` - Postal codes
+- `driver_license` - Driver's license numbers
+- `bank_account` - Bank account numbers
+- `japanese_name_hiragana` - Japanese names (Hiragana)
+- `japanese_name_katakana` - Japanese names (Katakana)
+- `japanese_name_kanji` - Japanese names (Kanji)
+
+### China (location: cn)
+- `mobile` - Mobile phone numbers
+- `landline` - Landline numbers
+- `national_id` - National ID (18 digits)
+- `passport` - Passport numbers
+- `social_credit` - Unified Social Credit Code
+- `bank_card` - Bank card numbers
+- `chinese_name` - Simplified Chinese names
+
+### India (location: in)
+- `mobile` - Mobile phone numbers
+- `landline` - Landline numbers
+- `aadhaar` - Aadhaar number
+- `pan` - PAN (Permanent Account Number)
+- `passport` - Passport numbers
+- `voter_id` - Voter ID (EPIC)
+- `driving_license` - Driving license
+- `pincode` - PIN codes
+- `ifsc` - IFSC codes
+- `gst` - GST numbers
+- `indian_name` - Indian names (Latin script)
+
+**Total**: 60+ patterns across 7 locations
 
 ## Roadmap
 
@@ -305,7 +354,7 @@ python -c "from regexvault import load_registry; load_registry(validate_examples
 - ✅ Core engine (find/validate/redact)
 - ✅ CLI interface
 - ✅ Python API
-- ✅ KR/COMMON patterns
+- ✅ Multi-country patterns (KR/US/TW/JP/CN/IN/COMMON)
 
 ### Sprint 2
 - REST/gRPC server
